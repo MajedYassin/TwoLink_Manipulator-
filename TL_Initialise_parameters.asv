@@ -28,5 +28,5 @@ sdd1 = timeseries(joint_acceleration(:,1), time_period);
 sdd2 = timeseries(joint_acceleration(:,2), time_period); 
 s = timeseries(joint_position, time_period);
 
-
-
+pos = csvread("pendu.txt");
+vel = csvread("Joint_velocities.txt");
