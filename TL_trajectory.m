@@ -29,7 +29,7 @@ if (hi > ((Vmax^2)/abs(Amax)))
     end
     while t <= (T - Ta)
         q{x}   = q0 + Amax*Ta * (t - Ta/2);
-        qd{x}  = Amax * Ta;
+        qd{x}  = Vmax;
         qdd{x} = Amax;
         x = x + 1;
         t = t + dt;
@@ -68,19 +68,29 @@ hj = qj - q0;
 Aj = hj / (Ta*(T-Ta));
 Vj = hj / (T - Ta);
 
-%%Second Joint 
 
+%%Second Joint 
 q1 = cell(25, 1);
 q1d = cell(60, 1);
 q1dd = cell(60, 1);
 tj = t0;
 x = 1; 
+
 while tj <= Ta
     q1{x}   = q0 + 0.5*Aj*(tj - t0)^2;
     q1d{x}  = Aj * (tj - t0);
     q1dd{x} = Aj;
     x = x + 1;
     tj = tj +dt;
+end
+if (hj > ((Vmax^2)/abs(Amax)))
+     while tj <= (T - Ta)
+            q1{x}   = q0 + Aj*Ta * (tj - Ta/2);
+            q1d{x}  = Aj * Ta;
+            q1dd{x} = Aj;
+            x = x + 1;
+            tj = tj + dt;
+     end
 end
 while tj <= T
     q1{x}   = qj - 0.5*Aj*(T - tj)^2;
@@ -92,10 +102,6 @@ end
 
 Q = cell2mat(q);
 Q1 = cell2mat(q1);
-Qd = gradient(Q)/dt;
-Q1d = gradient(Q1)/dt;
-Qdd = gradient(Qd)/dt;
-Q1dd = gradient(Q1d)/dt;
 
 
 Qda   = cell2mat(qd);
@@ -105,11 +111,42 @@ Q1dda = cell2mat(q1dd);
 
 time = 0:dt:T;
 
+%Plot Positon, Velocity and Acceleration trajectories of First Link
+tiledlayout(3,1)
+ax1 = nexttile;
 plot(time, Q)
-hold on 
-plot(time, Qda)
+ylabel('Position (rad)', 'FontSize', 11)
 
+ax2 = nexttile;
+plot(time, Qda)
+ylabel('Velocity (rad/s)', 'FontSize', 11)
+
+ax3 = nexttile; 
+plot(time, Qdda)
+ylabel('Acceleration (rad/s^{2})', 'FontSize', 11)
+
+xlim([ax1 ax2 ax3],[0 0.62]) 
+plot1_title = ['First Link Trajectories for Rotation:', ' -\pi/4 rad'];
+title(ax1, plot1_title,'FontSize', 14)
+xlabel(ax3,'Time(s)', 'FontSize', 11) 
+
+%Plot Position, Velocity and Acceleration trajectories of second link
 figure
+tiledlayout(3,1)
+ax1 = nexttile;
 plot(time, Q1)
-hold on 
+ylabel('Position (rad)', 'FontSize', 11)
+
+ax2 = nexttile;
 plot(time, Q1da)
+ylabel('Velocity (rad/s)', 'FontSize', 11)
+
+ax3 = nexttile; 
+plot(time, Q1dda)
+ylabel('Acceleration (rad/s^{2})', 'FontSize', 11)
+
+xlim([ax1 ax2 ax3],[0 0.62]) 
+ylim(ax3,[-6 6])
+plot2_title = ['Second Link Trajectories for Rotation:', ' \pi/6 rad'];
+title(ax1, plot2_title,'FontSize', 14)
+xlabel(ax3,'Time(s)', 'FontSize', 11) 
