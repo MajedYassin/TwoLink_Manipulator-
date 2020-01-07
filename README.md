@@ -2,15 +2,13 @@
 
 ## General Info 
 
-This project includes a number of small programs related to measuring the applied torque on the links of a two link manipualtor.
-The Repository inlcudes a number of small programs which can be used to simulate and plot the state response and torque required in order to achiev a specified trajectory. 
-These include: 
+This project includes a number of related functions which model the state and applied torque of each of the links of a two link manipualtor.
 
-- Trapezidal Trajectory planner which estimates the link positions, velocities and accelerations for a defined maximum acceleration and velocity
-- Feedforward Torque control Simulink model 
-- Simulink model of a two link pendulum (no applied torque to the joint except gravity);
-- text files of Position and Velocity trajectories have also been provided for testing of the model. 
+The project comprises a number of solvers implemented in MATLAB code and Simulink models: 
 
+- Trapezoidal trajectory planner which calculates link positions, velocities and accelerations for a set maximum acceleration and velocity
+- Feedforward torque control model in simulink
+- Modelling a two link pendulum in Simulink (no applied torque) 
 
 ## Technology 
 Software required 
@@ -21,17 +19,37 @@ Start by cloning the git repository from address:
 
 "https://github.com/MajedYassin/TwoLink_Manipulator-.git"
 
-In order to run/test the Feedforward torque control model in Simulink first: 
+In order to run/test the Feedforward torque control model in Simulink: 
 
-- Run the Trapezoidla Trajectory file in MATLAB;
+- Run 'TL_trajectory.m', the trapezoidal trajectory solver
 
-- Run initialise Parameters; 
+- Run 'TL_initialise_parameters.m' to set the initial parameters for the manipulator model 
 
-- Run the Model; 
+- Set stop time and time step
+
+- Run "Twolink_torquecontrol.slx"
+
+<p align="center">
+  <img src="Figures/feedforward_torque_model.JPG">
+  <p align="center"> 
+  <b> Figure 2: Feedforward Torque Control Model</b><br>
+</p>
 
 ***Note: The timestep in the trajectory modeule and both Simulink models has been set to 0.01, 
-  please remember to adjust this value accordingly in all each when changing the timestep in either of them;***
+  please remember to adjust this value accordingly when changing the timestep in the TL_trajectory.m code;***
   
-When Running the Pendulum_model: 
+Pendulum model: 
 
-- Set the Starting Position (Initial Joint Angles) in the Simulink model in the constant block labelled q; 
+The Pendulum model simulates the motion of a two link manipulator when the link motors are disengaged and links allowed to fall, effectively turning the manipulator into a two link pendulum. The component of friction is added to the model's dynamics to replicate the energy loss due to friction. 
+
+To Run the pendulum model set the desired initial joint angles of the links in the Simulink model, in the constant block labelled q. 
+
+<p align="center">
+  <img src="Figures/Pendulum_model.JPG">
+  <p align="center"> 
+  <b> Figure 2: Pendulum Model </b><br>
+</p>
+
+
+
+
